@@ -1,0 +1,150 @@
+{
+    "ready": true,
+    "onInitV2": true,
+    "mode": "new",
+    "viewHeader": "disable",
+    "productOfferCfg": null,
+    "addressOrpon": true,
+    "address": {
+        "id": "14529534",
+        "name": "Московская область"
+    },
+    "restrictSearch": true,
+    "enableConfig": true,
+    "editingProduct": "exact",
+    "differencePoc": false,
+    "techAvInfo": [
+        {
+            "productType": "SHPD",
+            "status": true,
+            "techAv": [
+                {
+                    "technology": "2",
+                    "maxSpeed": 100
+                },
+                {
+                    "technology": "FTTH",
+                    "maxSpeed": 100
+                }
+            ]
+        },
+        {
+            "productType": "KONVERGENT",
+            "status": true,
+            "techAv": [
+                {
+                    "technology": "2",
+                    "maxSpeed": 100
+                },
+                {
+                    "technology": "FTTH",
+                    "maxSpeed": 100
+                }
+            ]
+        },
+        {
+            "productType": "IPTV",
+            "status": true,
+            "techAv": [
+                {
+                    "technology": "2",
+                    "maxSpeed": "NO_LIMIT"
+                },
+                {
+                    "technology": "FTTH",
+                    "maxSpeed": "NO_LIMIT"
+                }
+            ]
+        }
+    ],
+    "properties": [
+        {
+            "codeName": "PRODUCTS",
+            "value": [
+                "WINK_TVONLINE",
+                "SALE_EQUIPMENT",
+                "SHPD"
+            ]
+        },
+        {
+            "codeName": "CLIENT_SEGMENTS",
+            "value": [
+                "3"
+            ]
+        },
+        {
+            "codeName": "LANDSCAPE",
+            "value": [
+                "RTK"
+            ],
+            "required": false
+        },
+        {
+            "codeName": "AVAILABILITY_FOR_CUSTOMERS_VK",
+            "value": [
+                "NEW_CUSTOMERS"
+            ],
+            "required": false,
+            "matchType": "IN"
+        },
+        {
+            "codeName": "TARGET_ROUTE",
+            "value": [
+                "non_public",
+                "public",
+                "employee",
+                "KPPT2",
+                "individual",
+                "for_TELE2",
+                "hold"
+            ]
+        },
+        {
+            "codeName": "DISTRIBUTION_CHANNEL",
+            "value": [
+                "105"
+            ]
+        }
+    ],
+    "presetProperties": [
+        {
+            "codeName": "FIRST_TIME?",
+            "value": true,
+            "exception": []
+        },
+        {
+            "codeName": "AVAILABLE_FOR_BONUSES",
+            "value": false,
+            "exception": []
+        }
+    ],
+    "outerFuncs": [
+        {
+            "id": "VATSchoose",
+            "handler": null
+        },
+        {
+            "id": "NNumberschoose",
+            "handler": null
+        }
+    ],
+    "duplicate": {
+        "check": true,
+        "blockingProductSpecifications": [
+            {
+                "id": 3146740761
+            },
+            {
+                "id": 3146686761
+            }
+        ]
+    },
+    "installmentsSettings": {
+        "check": "block",
+        "limit": 45000.0,
+        "limitRest": 45000.0
+    },
+    "orderDate": "2026-02-23T14: 19: 51+05: 00",
+    "enableTransferCfg": false,
+    "onlyPackage": null
+}
