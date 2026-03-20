@@ -11,18 +11,17 @@
 # 2.3.  Преобразуем rt_widget_config_minified в удобочитаемый вид                                           -> rt_widget_config_beauty
 # 3.    Создание файла встройки
 # 3.1.  В переменной TEMPLATE меняем текст rt_widget_config_beauty на переменную rt_widget_config_beauty    -> vk_result
-# 3.2.  Создание файла PATH_RESULT с содержимым vk_result
+# 3.2.  Замена в переменной vk_result текста \"function_off_json\" на function(){}
+# 3.3.  Создание файла PATH_RESULT с содержимым vk_result
 
 export LC_ALL=ru_RU.UTF-8
 export LANG=ru_RU.UTF-8
 
 # Объявление констант
 PATH_JSON="/home/ruslan/Documents/RTK_IT/VK_productOffer.json"
-PATH_TEMPLATE="/home/ruslan/Documents/RTK_IT/VK_template.html"
 PATH_RESULT="/home/ruslan/Documents/RTK_IT/VK_result.html"
 
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Значение PATH_JSON: $PATH_JSON"
-echo "$(date '+%Y-%m-%d %H:%M:%S') - Значение PATH_TEMPLATE: $PATH_TEMPLATE"
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Значение PATH_RESULT: $PATH_RESULT"
 
 TEMPLATE='<!DOCTYPE html>
@@ -54,12 +53,13 @@ RT_WIDGET_CONFIG='{
         "differencePOC": false,
         "outputData": {
             "status": true,
-            "onChangePrice": "function(){}"
+            "onChangePrice": "function_off_json"
         },
         "_buildDate": "21.11.2024"
     }
 }'
 
+FUNCTION_OFF='function(){}'
 
 echo ""
 echo "1.1.  Загружаем JSON для встраивания из $PATH_JSON:"
@@ -102,5 +102,9 @@ vk_result="${TEMPLATE//rt_widget_config_beauty/$rt_widget_config_beauty}"
 # echo "$(date '+%Y-%m-%d %H:%M:%S') - Значение rt_widget_config_beauty: $VK_result"
 
 echo ""
-echo "3.2.  Создание файла PATH_RESULT с содержимым vk_result:"
+echo "3.2.  Замена в переменной vk_result текста \"function_off_json\" на function(){}:"
+vk_result="${vk_result//\"function_off_json\"/$FUNCTION_OFF}"
+
+echo ""
+echo "3.3.  Создание файла PATH_RESULT с содержимым vk_result:"
 echo "$vk_result" > $PATH_RESULT
