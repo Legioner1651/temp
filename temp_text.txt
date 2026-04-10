@@ -8,6 +8,27 @@ https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInte
 колонки timestamp_nginx, response:
 https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
 
+bash
+curl -X POST "https://rt.ru" \
+-u <user:pass> \
+-H "Content-Type: application/json" \
+-d '{
+  "_source": ["response"],
+  "query": {
+    "bool": {
+      "must": [
+        { "match_phrase": { "api": "epc-params" } },
+        { "query_string": { "query": "\"260120478\" OR \"655043\"" } }
+      ],
+      "filter": [
+        { "range": { "timestamp_nginx": { "gte": "now-30d/d", "lte": "now" } } }
+      ]
+    }
+  },
+  "sort": [ { "timestamp_nginx": "asc" } ],
+  "size": 500
+}'
+
 с фиксированной шириной
 https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),grid:(columns:(response:(width:100),timestamp_nginx:(width:180),uri:(width:400))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
 
