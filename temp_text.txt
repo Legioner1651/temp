@@ -98,8 +98,51 @@ curl -X GET "https://sales-prod-m9-kibana.ks.rt.ru/api/console/proxy?path=sales-
   ]
 }'
 ---------------------------------------------------------------------------------------------------------------
-есть https запрос https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
-нужно вызвать его через curl
+есть https запрос к Elasticsearch и Kibana https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
+нужно преобразовать его в запрос вида curl --request GET
+---------------------------------------------------------------------------------------------------------------
+curl --request GET \
+  "https://sales-prod-m9-kibana.ks.rt.ru/api/console/proxy?path=sales-prod-m9-es/_search&method=GET" \
+  -H "kbn-xsrf: true" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": {
+      "bool": {
+        "must": [
+          {
+            "match_phrase": {
+              "api": "epc-params"
+            }
+          },
+          {
+            "query_string": {
+              "query": "\"260120478\" OR \"655043\"",
+              "fields": ["_all"]
+            }
+          }
+        ],
+        "filter": [
+          {
+            "range": {
+              "timestamp_nginx": {
+                "gte": "now-30d/d",
+                "lte": "now"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sort": [
+      {"timestamp_nginx": "asc"}
+    ],
+    "size": 500,
+    "_source": ["timestamp_nginx", "response", "uri"]
+  }'
+---------------------------------------------------------------------------------------------------------------
+curl -X GET \
+  "https://sales-prod-m9-kibana.ks.rt.ru/api/saved_objects/_find?type=search&fields=attributes" \
+  -H "kbn-xsrf: true"
 ---------------------------------------------------------------------------------------------------------------
 curl -k -X GET "https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('\$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))"
 ---------------------------------------------------------------------------------------------------------------
