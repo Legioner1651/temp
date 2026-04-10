@@ -7,7 +7,7 @@ https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInte
 
 колонки timestamp_nginx, response:
 https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
-
+---------------------------------------------------------------------------------------------------------------
 bash
 curl -X POST "https://rt.ru" \
 -u <user:pass> \
@@ -28,7 +28,80 @@ curl -X POST "https://rt.ru" \
   "sort": [ { "timestamp_nginx": "asc" } ],
   "size": 500
 }'
-
+---------------------------------------------------------------------------------------------------------------
+bash
+curl -X POST "https://rt.ru" \
+     -H 'Content-Type: application/json' \
+     -d '{
+  "size": 1,
+  "sort": [{"timestamp_nginx": {"order": "desc"}}],
+  "query": {
+    "bool": {
+      "must": [
+        {"match_phrase": {"api": "epc-params"}},
+        {"query_string": {"query": "\"260120478\" OR \"655043\""}}
+      ]
+    }
+  },
+  "_source": ["response"]
+}'
+---------------------------------------------------------------------------------------------------------------
+curl -X POST "https://rt.ru" \
+-H "Content-Type: application/json" \
+-d '{
+  "size": 1,
+  "_source": ["response"],
+  "query": {
+    "bool": {
+      "must": [
+        { "term": { "api": "epc-params" } },
+        { "query_string": { "query": "\"260120478\" OR \"655043\"" } }
+      ],
+      "filter": [
+        { "range": { "timestamp_nginx": { "gte": "now-30d/d" } } }
+      ]
+    }
+  },
+  "sort": [
+    { "timestamp_nginx": { "order": "desc" } }
+  ]
+}'
+---------------------------------------------------------------------------------------------------------------
+curl -X GET "https://sales-prod-m9-kibana.ks.rt.ru/api/console/proxy?path=sales-prod-m9%2F_search&method=GET" \
+-H "kbn-xsrf: true" \
+-H "Content-Type: application/json" \
+-d '{
+  "size": 1,
+  "_source": ["response"],
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match_phrase": {
+            "api": "epc-params"
+          }
+        },
+        {
+          "query_string": {
+            "query": "(\"260120478\" OR \"655043\")"
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "timestamp_nginx": {
+        "order": "desc"
+      }
+    }
+  ]
+}'
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+Результат запроса к Kibana в Elasticsearch https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc))) выдает 2 колонки.
+Нужно создать curl которым можно получить значение колонки response с самой последней датой из колонки timestamp_nginx
+---------------------------------------------------------------------------------------------------------------
 с фиксированной шириной
 https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),grid:(columns:(response:(width:100),timestamp_nginx:(width:180),uri:(width:400))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
 
