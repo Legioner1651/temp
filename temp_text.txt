@@ -149,8 +149,60 @@ curl -k -X GET "https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters
 Результат запроса к Kibana в Elasticsearch https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc))) выдает 2 колонки.
 Нужно создать curl которым можно получить значение колонки response с самой последней датой из колонки timestamp_nginx
 ---------------------------------------------------------------------------------------------------------------
+как на странице Kibana в Elasticsearch можно найти запросы которые использовались для получения данных
+---------------------------------------------------------------------------------------------------------------
 с фиксированной шириной
 https://sales-prod-m9-kibana.ks.rt.ru/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-30d%2Fd,to:now))&_a=(columns:!(timestamp_nginx,response,uri),dataSource:(dataViewId:apimanreq,type:dataView),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:apimanreq,key:api,negate:!f,params:(query:epc-params),type:phrase),query:(match_phrase:(api:epc-params)))),grid:(columns:(response:(width:100),timestamp_nginx:(width:180),uri:(width:400))),hideChart:!t,interval:auto,query:(language:kuery,query:'(%22260120478%22%20OR%20%22655043%22)'),rowsPerPage:500,sort:!(!(timestamp_nginx,asc)))
 
 получение поля response:
 https://sales-prod-m9-kibana.ks.rt.ru/api/console/proxy?path=apimanreq/_search&method=GET&body={"size":1,"sort":[{"timestamp_nginx":"desc"}],"query":{"bool":{"must":[{"match_phrase":{"api":"epc-params"}},{"query_string":{"query":"(\"260120478\" OR \"655043\")"}}]}},"_source":["response"]}
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+1. CURL запрос
+Замените <your_cookies> на строку из вашего браузера (вкладка Network в DevTools).
+
+curl --location 'https://rt.ru' \
+--header 'Content-Type: application/json' \
+--header 'kbn-xsrf: true' \
+--header 'Cookie: <your_cookies>' \
+--data '{
+  "size": 1,
+  "_source": ["response"],
+  "query": {
+    "bool": {
+      "must": [
+        { "match_phrase": { "api": "epc-params" } },
+        { "query_string": { "query": "\"260120478\" OR \"655043\"" } }
+      ],
+      "filter": [
+        { "range": { "timestamp_nginx": { "gte": "now-30d/d", "lte": "now" } } }
+      ]
+    }
+  },
+  "sort": [
+    { "timestamp_nginx": { "order": "asc" } }
+  ]
+}'
+
+---------------------------------------------------------------------------------------------------------------
+2. Данные для импорта в Bruno
+В Bruno выберите "Create Collection" -> "New Request" (или импорт через CURL), и укажите следующие параметры:
+Method: POST
+URL: https://rt.ru
+Headers:
+Content-Type: application/json
+kbn-xsrf: true
+Body (JSON): (вставьте JSON из блока выше).
+Auth: Используйте вкладку Cookies в Bruno, чтобы вставить активную сессию из браузера.
+---------------------------------------------------------------------------------------------------------------
+Как получить куки для запроса:
+1. Откройте вашу ссылку в Chrome.
+2. Нажмите F12 -> вкладка Network.
+3. Обновите страницу.
+4. Найдите любой запрос к _search или bootstrap.
+5. В разделе Request Headers скопируйте всё значение после Cookie:.
+Нужно ли добавить в запрос автоматическую очистку ответа, чтобы в консоли Bruno сразу отображался только текст из поля response?
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
