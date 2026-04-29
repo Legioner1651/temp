@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv=X-UA-Compatible content="IE=11">
+  <meta name=google content=notranslate>
+  <meta charset=utf-8>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>EPC Web components</title>
+</head>
+
+<body style="margin: 0;background-color: #ccc;">
+  <div id=getProductOfferCfg style="position: fixed;
+                            top: 4px;
+                            right: 8px;
+                            background-color: #e0e0e0;
+                            color: black;
+                            z-index: 50;
+                            width: 100px;
+                            box-sizing: border-box;
+                            padding: 5px;
+                            cursor: pointer;
+                            text-align: center;
+                            font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
+                            font-size: 13px;
+                            display: block;" title="Продуктовая конфигурация">webPOC</div>
+  <div id=getProductOfferCfgAsync style="position: fixed;
+                            top: 4px;
+                            right: 121px;
+                            background-color: #e0e0e0;
+                            color: black;
+                            z-index: 50;
+                            width: 100px;
+                            box-sizing: border-box;
+                            padding: 5px;
+                            cursor: pointer;
+                            text-align: center;
+                            font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
+                            font-size: 13px;
+                            display: block;" title="Продуктовая конфигурация">POC v1.0</div>
+  <div id=getProductOfferCfgAsync2 style="position: fixed;
+                            top: 4px;
+                            right: 235px;
+                            background-color: #e0e0e0;
+                            color: black;
+                            z-index: 50;
+                            width: 100px;
+                            box-sizing: border-box;
+                            padding: 5px;
+                            cursor: pointer;
+                            text-align: center;
+                            font-family: Roboto,Helvetica Neue,Helvetica,Arial,sans-serif;
+                            font-size: 13px;
+                            display: block;" title="Продуктовая конфигурация">POC v2.0</div>
+  <div id=web-component-1></div>
+  <script>window.RT_WIDGET_CONFIG = {
+      'web-component-1': {
+        "ready": true,
+        "installmentsSettings": {
+          "limitRest": null
+        },
+
+
+
+
+        onInit: function (resultType, errors, warnings) {
+          switch (resultType) {
+            case 'SUCCESS':
+              console.log('SUCCESS')
+              break;
+            case 'WARNING':
+              console.log('WARNING', warnings)
+              break;
+            case 'ERROR':
+              console.log('ERROR', errors, warnings)
+              break;
+            default:
+              break;
+          }
+        },
+        outputData: {
+          status: false,
+          getProductOfferCfg: function () {
+            return 'данные пока не готовы'
+          },
+          getProductOfferCfgAsync: function () {
+            return 'данные пока не готовы'
+          }
+        },
+        outerFuncs:
+          [
+            {
+              id: 'NNumberschoose',
+              handler: function (maxCount, params, resolve, reject) {
+                var nums = prompt("Введите номер:", '9123456789'); //Выберите номера на платформе и введите сюда
+                var numarr = nums.split(',', maxCount);
+                let response = numarr.map(function (num) {
+                  return {
+                    "action": "add",
+                    "instId": ""
+                  }
+                }
+                );
+                resolve(response)
+              }
+            }
+          ]
+      }
+    }
+    var createXHRRequest = function (method, url, param, token, resolve, reject) {
+      resolve = resolve || function () { }
+      reject = reject || function () { }
+      var xhr = new XMLHttpRequest();
+      if (method === 'GET' && param) {
+        url += param;
+      }
+      xhr.open(method, url);
+      if (token) {
+        xhr.setRequestHeader('Authorization', token);
+      }
+      if (method === 'POST') {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
+      xhr.onload = function () {
+        if (this.status >= 200 && this.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            status: this.status,
+            statusText: xhr.statusText
+          });
+        }
+      };
+      xhr.onerror = function () {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      };
+      if (method === 'POST') {
+        xhr.send(param);
+      } else {
+        xhr.send();
+      }
+    }
+
+    // createXHRRequest('POST', 'http://localhost:8080/widget/POC.json', null, null, function (response) {
+    //   let POC = JSON.parse(response).ProductOffering || []
+    //   window.RT_WIDGET_CONFIG['web-component-1'].productOfferCfg = POC
+    // })</script>
+  <script>document.getElementById('getProductOfferCfg').addEventListener('click', function (event) {
+      if (window.RT_WIDGET_CONFIG['web-component-1'].outputData.status) {
+        alert(window.RT_WIDGET_CONFIG['web-component-1'].outputData.getProductOfferCfg())
+        console.log(window.RT_WIDGET_CONFIG['web-component-1'].outputData.getProductOfferCfg())
+      } else {
+        console.log('компонент не готов')
+      }
+    })
+
+    var addPOCEventListener = function (POCVersion) {
+      if (!POCVersion) {
+        POCVersion = '1.0'
+      }
+
+      if (window.RT_WIDGET_CONFIG['web-component-1'].outputData.status) {
+        window.RT_WIDGET_CONFIG['web-component-1'].outputData.getProductOfferCfgAsync(POCVersion).then(function (POC) {
+          alert(POC)
+          console.log(POC)
+        })
+          .catch(function (error) {
+            alert(error)
+            console.error(error)
+          })
+
+      } else {
+        console.log('компонент не готов')
+      }
+    }
+
+    document.getElementById('getProductOfferCfgAsync').addEventListener('click', function (event) {
+      addPOCEventListener()
+    })
+
+    document.getElementById('getProductOfferCfgAsync2').addEventListener('click', function (event) {
+      addPOCEventListener('2.0')
+
+    })</script>
+
+  <script type="text/javascript"
+    src="https://epc-api.rt.ru/apiman-gateway/epc-front-wc/epc-offers-widget/1.8.4/static/js/app.js"></script>
+</body>
+
+</html>
