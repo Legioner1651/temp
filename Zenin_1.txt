@@ -1,0 +1,291 @@
+Пример для файла встройки - процесс УУ ЕПК:
+ЛС 850018744815
+
+Параметры вызова ВК ЕПК из Кибаны (или из консоли):
+{"ready":true,"apiKey":"0eb58769-34f6-4960-bb72-e2d31eafc6a6","orderDate":null,"viewMode":"productOffers","themeProperty":"default","addDisplayMode":{"enableSettings":true,"defaultOfferName":"comm","defaultOfferDescription":"comm","displayColumnId":false},"showWithNDSOnly":null,"hideRequiredPriceOffers":[],"enableConfig":true,"editingProduct":"exact","editingSegment":"exact","editingComponent":[],"enableTransferCfg":true,"onlyPackage":null,"restrictSearch":true,"mode":"clientProperties","productOfferCfg":[],"productOffers":[],"clientProperties":[{"systemId":"EIP","id":null,"ids":["850018744815"],"typeId":"account","flat":null,"version":null,"methodParams":{}}],"clientProfile":[],"differencePOC":true,"checkRequiredProps":true,"techAvInfo":[{"productType":"SHPD","status":true,"techAv":[{"technology":"2","maxSpeed":102.4}]}],"addressOrpon":true,"address":{"id":"32617698","name":"обл. МОСКОВСКАЯ г. РОШАЛЬ ул. СОВЕТСКАЯ д. 49"},"properties":[{"codeName":"PRODUCTS","value":["SHPD","IPTV","SALE_EQUIPMENT"],"required":null,"matchType":null},{"codeName":"CLIENT_SEGMENTS","value":["3"],"required":null,"matchType":null},{"codeName":"DISTRIBUTION_CHANNEL","value":["45","46","47","48","49","50","51","52","53","54","57","56","58","59","60","61","62","63","64","65","66","67","68","99","100","101","102","103","104","105","139","140","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","B2C","B2C_Marketplaces","B2C_NPP_Marketplaces","B2C_other"],"required":null,"matchType":null},{"codeName":"LANDSCAPE","value":["RTK"],"required":false,"matchType":null},{"codeName":"AVAILABILITY_FOR_CUSTOMERS_VK","value":["EXISTING_CUSTOMERS"],"required":false,"matchType":"IN"}],"bindedProperties":[],"presetProperties":[{"codeName":"INTERCOM_TUBE_TYPE","value":"0","exeption":[]},{"codeName":"AVAILABLE_FOR_BONUSES","value":false,"exeption":[]},{"codeName":"RETENTION_FP","value":true,"exeption":[]},{"codeName":"activationStatus","value":"notActivated","exeption":[]}],"fixedProperties":[],"duplicate":{"check":true,"blockingProductSpecifications":[{"id":3146740761},{"id":3146686761}]},"productSearchMode":null,"installmentsSettings":{"check":"notification","limit":45000.0,"limitRest":41200.0}}
+
+Запрос получения профиля:
+{
+    "method": "getProductOfferCfg",
+    "version": "2.0",
+    "methodParams": {
+        "marketSegments": [
+            {
+                "codeName": "3"
+            }
+        ],
+       "checkRequiredProps": true,
+        "properties": [
+            {
+                "codeName": "ADDRESS_ORPON",
+                "value": [
+                    "32617698"
+                ]
+            }
+        ],
+        "identification": {
+            "ids": [
+                "850018744815"
+            ],
+            "systemId": "EIP",
+            "typeId": "account"
+        }
+    },
+    "configId": "snoop"
+}
+
+Ответ:
+
+{
+   "resultType": "SUCCESS",
+   "resultDescriptions":    [
+            {
+         "returnCode": "0",
+         "message": "Успешное выполнение"
+      },
+            {
+         "returnCode": "0",
+         "message": "Успешное выполнение"
+      }
+   ],
+   "results": [   {
+      "mappings":       [
+                  {
+            "name": "GroupPackage_1",
+            "status": "On",
+            "bundledCfs":             [
+                              {
+                  "outerEntityType": "IPTV.CFS_SPEC_ID",
+                  "outerId": "iptv_access",
+                  "outerSystem": "RT.CENTER.KTP.B2C",
+                  "name": "Услуга IPTV",
+                  "codeName": "850018744815",
+                  "instId": "34854256785",
+                  "status": "On",
+                  "bundledCfs":                   [
+                                          {
+                        "outerEntityType": "IPTV_PACKAGE.package_code",
+                        "outerId": "WINK_ALL_IN_1",
+                        "outerSystem": "RT.CENTER.SIP",
+                        "name": "Wink Всё в одном ",
+                        "codeName": "WINK_ALL_IN_1",
+                        "status": "On",
+                        "validFor": {"startDateTime": "2025-08-24T14:52:49+03:00"},
+                        "noUseAlternative": false
+                     },
+                                          {
+                        "outerEntityType": "IPTV_MULTIROOM.SRDCODE",
+                        "outerId": "TVS_MRoom",
+                        "outerSystem": "RT.CENTER.SIP",
+                        "name": "SRDCODE Мультирума",
+                        "codeName": "850018744815",
+                        "status": "On",
+                        "noUseAlternative": false
+                     },
+                                          {
+                        "outerEntityType": "IPTV_MULTIROOM.CFS_SPEC_ID",
+                        "outerId": "multiroom_access",
+                        "outerSystem": "RT.CENTER.KTP.B2C",
+                        "name": "Дополнительная приставка Мультирум",
+                        "status": "On",
+                        "realizingServices": [                        {
+                           "outerSystem": "RT.CENTER.SIP",
+                           "codeName": "IPTV_MULTIROOM.SERVICELOGIN_IPTV",
+                           "value": "0177183287"
+                        }],
+                        "properties": [                        {
+                           "codeName": "IDENT_STB",
+                           "value": ["0177183287"]
+                        }],
+                        "noUseAlternative": false
+                     }
+                  ],
+                  "realizingServices":                   [
+                                          {
+                        "outerSystem": "RT.CENTER.SIP",
+                        "codeName": "IPTV.LOGIN_IPTV",
+                        "value": "2398276-3"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "IPTV.STARTSERVFIRSTID",
+                        "value": "34854256785"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.SIP",
+                        "codeName": "IPTV.ENVELOPENUMBER",
+                        "value": "0177992119"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.VIRTUAL_NUMBER",
+                        "value": "22602402699"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.STARTSERVFIRSTID",
+                        "value": "34843695394"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.WITH_OTA",
+                        "value": "0"
+                     }
+                  ],
+                  "properties": [                  {
+                     "codeName": "TVINTERFACE_TYPE",
+                     "value": ["WINK"]
+                  }],
+                  "noUseAlternative": true
+               },
+                              {
+                  "outerEntityType": "INET.CFS_SPEC_ID",
+                  "outerId": "internet_access",
+                  "outerSystem": "RT.CENTER.KTP.B2C",
+                  "name": "Услуга Интернет",
+                  "codeName": "850018744815",
+                  "instId": "34843695694",
+                  "status": "On",
+                  "bundledCfs":                   [
+                                          {
+                        "outerEntityType": "INET.TariffPlan",
+                        "outerId": "1f_uThR_TD1",
+                        "outerSystem": "RT.CENTER.SIP",
+                        "name": "Технологии развлечения. Тест-драйв",
+                        "codeName": "850018744815",
+                        "status": "On",
+                        "validFor": {"startDateTime": "2026-06-16T00:02:07+03:00"},
+                        "properties": [                        {
+                           "codeName": "TARIFF_PLAN_NAME_ASR_SIP",
+                           "value": ["Технологии развлечения. Тест-драйв"]
+                        }],
+                        "alternativeCfs":                         {
+                           "outerId": "TECH_IN+IP_FTTX",
+                           "name": "Технологический ТП",
+                           "status": "On",
+                           "noUseAlternative": false
+                        },
+                        "noUseAlternative": false
+                     },
+                                          {
+                        "outerEntityType": "INET.AccessFree",
+                        "outerId": "1",
+                        "outerSystem": "RT.CENTER.KTP.B2C",
+                        "name": "Признак бесплатного Доступа",
+                        "codeName": "850018744815",
+                        "status": "On",
+                        "noUseAlternative": false
+                     }
+                  ],
+                  "realizingServices":                   [
+                                          {
+                        "outerSystem": "RT.CENTER.SIP",
+                        "codeName": "INET.LOGIN",
+                        "value": "2398276-1"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "INET.STARTSERVFIRSTID",
+                        "value": "34843695694"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.SIP",
+                        "codeName": "INET.LOGIN_RADIUS",
+                        "value": "2398276_R@msk"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.VIRTUAL_NUMBER",
+                        "value": "22602402699"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.STARTSERVFIRSTID",
+                        "value": "34843695394"
+                     },
+                                          {
+                        "outerSystem": "RT.CENTER.START",
+                        "codeName": "LINE.WITH_OTA",
+                        "value": "0"
+                     }
+                  ],
+                  "noUseAlternative": false
+               }
+            ],
+            "realizingServices": [            {
+               "outerSystem": "EIP",
+               "codeName": "account",
+               "value": "850018744815"
+            }],
+            "noUseAlternative": false
+         },
+                  {
+            "name": "Собственное оборудование абонента",
+            "status": "On",
+            "bundledCfs": [            {
+               "outerEntityType": "EQUIP.OwnEquip",
+               "outerId": "1_40",
+               "outerSystem": "RT.CENTER.KTP.B2C",
+               "name": "Технический код",
+               "instId": "111010422207",
+               "status": "On",
+               "realizingServices":                [
+                                    {
+                     "outerSystem": "RT.CENTER.TU.TG",
+                     "codeName": "EQUIP.CPECATEGORYID",
+                     "value": "40"
+                  },
+                                    {
+                     "outerSystem": "RT.CENTER.TU.TG",
+                     "codeName": "EQUIP.CPECLASSID",
+                     "value": "1"
+                  },
+                                    {
+                     "outerSystem": "RT.CENTER.TU.TG",
+                     "codeName": "EQUIP.BILL_EQUIPMENT",
+                     "value": "start_equipment"
+                  },
+                                    {
+                     "outerSystem": "RT.CENTER.TU.TG",
+                     "codeName": "EQUIP.TRANSFER_CONDITION_ID",
+                     "value": "3"
+                  }
+               ],
+               "properties":                [
+                                    {
+                     "codeName": "equipment_condition",
+                     "value": ["PAST_IN_USAGE"]
+                  },
+                                    {
+                     "codeName": "Serial_Number",
+                     "value": ["111010422207"]
+                  },
+                                    {
+                     "codeName": "Device_Model",
+                     "value": ["STB, Стандарт, ZXV10 B700V7L"]
+                  },
+                                    {
+                     "codeName": "property_type",
+                     "value": ["33"]
+                  }
+               ],
+               "noUseAlternative": false
+            }],
+            "realizingServices": [            {
+               "outerSystem": "EIP",
+               "codeName": "account",
+               "value": "850018744815"
+            }],
+            "noUseAlternative": false
+         }
+      ],
+      "properties": [      {
+         "codeName": "FIO",
+         "value": ["ШМАТОВ ДМИТРИЙ ЮРЬЕВИЧ"]
+      }],
+      "dataSets": [      {
+         "dataSetId": "stocks",
+         "items": []
+      }]
+   }]
+}
