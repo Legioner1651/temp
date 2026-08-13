@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://apache.org"
+          xmlns:xsi="http://w3.org"
+          xsi:schemaLocation="http://apache.org http://apache.org">
+
+    <profiles>
+        <profile>
+            <id>custom-repositories</id>
+            <repositories>
+                <!-- Первый приоритет: Официальный Maven Central -->
+                <repository>
+                    <id>central-primary</id>
+                    <name>Maven Central Primary</name>
+                    <url>https://repo.maven.apache.org/maven2</url>
+                    <layout>default</layout>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+
+                <!-- Второй приоритет: Резервный репозиторий -->
+                <repository>
+                    <id>central-backup</id>
+                    <name>Maven Central Backup</name>
+                    <url>https://maven-repo1.maven.org</url>
+                    <layout>default</layout>
+                    <snapshots>
+                        <enabled>false</enabled>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <!-- Активация профиля по умолчанию -->
+    <activeProfiles>
+        <activeProfile>custom-repositories</activeProfile>
+    </activeProfiles>
+</settings>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                              https://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+<mirrors>
+    <mirror>
+        <id>fallback-central</id>
+        <name>Fallback to repo1.maven.org</name>
+        <url>https://maven-repo1.maven.org</url>
+        <mirrorOf>central</mirrorOf>
+    </mirror>
+</mirrors>
+
+<!-- Улучшение: Настройки сети для быстрой проверки -->
+<proxies>
+    <!-- Если нужен прокси -->
+</proxies>
+</settings>
